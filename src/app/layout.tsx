@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { GoogleOAuthProvider } from "@react-oauth/google";
-
 const inter = Inter({ subsets: ["latin"] });
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { AuthProvider } from "@/context/AuthContext";
 
 export const metadata: Metadata = {
   title: "ClassiMail",
@@ -19,12 +19,16 @@ export default function RootLayout({
     process.env.CLIENT_ID == undefined ? "" : process.env.CLIENT_ID;
 
   return (
-    <html lang="en">
-      <body className={`${inter.className} container mx-auto`}>
-        <GoogleOAuthProvider clientId={CLIENT_ID}>
-          {children}
-        </GoogleOAuthProvider>
-      </body>
+    <html lang="en" className="">
+      <AuthProvider>
+        <body
+          className={`${inter.className} container mx-auto relative bg-neutral-100 dark:bg-slate-900`}
+        >
+          <GoogleOAuthProvider clientId={CLIENT_ID}>
+            {children}
+          </GoogleOAuthProvider>
+        </body>
+      </AuthProvider>
     </html>
   );
 }
