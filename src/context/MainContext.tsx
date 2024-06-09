@@ -24,7 +24,9 @@ type MainStateType = {
 };
 
 const initialState: MainStateType = {
-  emails: [{ sender: "", snippet: "", messageId: "", labelIds: [] }],
+  emails: [
+    { sender: "", snippet: "", messageId: "", labelIds: [], category: "" },
+  ],
   setEmails: () => {},
   tags: [""],
   setTags: () => {},

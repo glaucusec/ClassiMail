@@ -33,7 +33,13 @@ export default function EmailsList() {
       <div className="mt-10 rounded-md flex flex-col gap-2">
         {emails.map((email) => {
           const url = navURL(email.messageId);
-          return <MailCard email={email} url={url.toString()} />;
+          return (
+            <MailCard
+              key={email.messageId}
+              email={email}
+              url={url.toString()}
+            />
+          );
         })}
       </div>
       <Modal isOpen={modalOpen}>

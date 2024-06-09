@@ -1,5 +1,6 @@
 import React from "react";
 import { auth } from "@/auth";
+import Image from "next/image";
 
 export default async function Profile() {
   const session = await auth();
@@ -9,7 +10,7 @@ export default async function Profile() {
   return (
     <React.Fragment>
       <section className="">
-        <img
+        <Image
           className="relative inline-block h-12 w-12 rounded-full object-cover object-center"
           src={image}
           alt="avatar"
