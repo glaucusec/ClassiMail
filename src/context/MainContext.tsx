@@ -65,7 +65,7 @@ export default function MainContextProvider({
       });
       const data = await response.json();
       setEmails(data);
-      toast.success("Fetched mails !");
+      if (response.ok) toast.success("Fetched mails !");
     } catch (err) {
       toast.error("Fetch Failed! Something went wrong!");
       console.error("Failed to fetch emails:", err);

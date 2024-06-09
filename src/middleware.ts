@@ -28,7 +28,6 @@ export async function middleware(request: NextRequest) {
     const invalidToken =
       error && error.code == 401 && error.status === "UNAUTHENTICATED";
 
-    if (invalidToken) console.log("session is invalid");
     if (isAuthRoute && !invalidToken) {
       return NextResponse.redirect(new URL("/emails", request.url));
     }
