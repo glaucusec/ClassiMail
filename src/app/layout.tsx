@@ -4,6 +4,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import MainContextProvider from "@/context/MainContext";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "ClassiMail",
@@ -26,6 +27,11 @@ export default function RootLayout({
             <GoogleOAuthProvider clientId={CLIENT_ID}>
               {children}
             </GoogleOAuthProvider>
+            <Toaster
+              position="bottom-center"
+              closeButton={true}
+              richColors={true}
+            />
           </div>
         </body>
       </MainContextProvider>

@@ -2,6 +2,16 @@ import OpenAI from "openai";
 
 export const messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [
   {
+    role: "system",
+    content: `
+    You will be provided an array of objects . the objects are data of e-mails. You have to format in a way that it should match the following categories. 1. Important: Emails that are personal or work-related and require immediate attention such as banking.
+      2. Promotions: Emails related to sales, discounts, and marketing campaigns.
+      3. Social: Emails from social networks, friends, and family.
+      4. Marketing: Emails related to marketing, newsletters, and notifications.
+      5. Spam: Unwanted or unsolicited emails.
+      6. General: If none of the above are matched, use General. The output should be a json object with messageid as the key and category you found as the value. `,
+  },
+  {
     role: "user",
     content: `
         You will be given an array that contains up to 15 objects.

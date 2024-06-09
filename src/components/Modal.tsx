@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
+import Close from "./svg/Close";
 
 type ModalProps = {
   isOpen: boolean;
@@ -9,13 +10,7 @@ type ModalProps = {
   position?: string;
 };
 
-function Modal({
-  isOpen,
-  hasCloseBtn,
-  onClose,
-  children,
-  position,
-}: ModalProps) {
+function Modal({ isOpen, hasCloseBtn, onClose, children }: ModalProps) {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [isModalOpen, setModalOpen] = useState<boolean>(isOpen);
 
@@ -58,7 +53,7 @@ function Modal({
           onClick={handleCloseModal}
           className="modal-close-btn hover:bg-gray-300 rounded-xl p-1"
         >
-          Close
+          <Close />
         </button>
       )}
       {children}

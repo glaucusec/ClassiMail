@@ -9,16 +9,21 @@ const openai = new OpenAI({
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
-
     const completion = await openai.chat.completions.create({
-      messages: [...messages, { role: "user", content: JSON.stringify(data) }],
+      messages: [
+        ...messages,
+        {
+          role: "user",
+          content: JSON.stringify(data),
+        },
+      ],
+      temperature: 0,
       model: "gpt-4o",
     });
 
     const gptResponse = completion.choices[0];
     const gptResponseContent = gptResponse.message.content;
     const gptParsedObject = JSON.parse(gptResponseContent || "");
-    console.log(gptParsedObject)
     return NextResponse.json({
       message: "Mails classified successfully",
       categories: gptParsedObject,

@@ -3,6 +3,7 @@ import React, { useContext } from "react";
 import { MainContext } from "@/context/MainContext";
 import { emailType } from "@/types";
 import EmailBadge from "./Badge";
+import TagSkeleton from "./skeleton/TagSkeleton";
 
 export default function MailCard({
   url,
@@ -20,7 +21,7 @@ export default function MailCard({
       >
         <section className="flex flex-row justify-between">
           <h2 className="text-md font-semibold">{email.sender}</h2>
-          {tagLoading && <span className="text-sm">Loading</span>}
+          {tagLoading && <TagSkeleton />}
           {!tagLoading && email.category && (
             <EmailBadge category={email.category} />
           )}

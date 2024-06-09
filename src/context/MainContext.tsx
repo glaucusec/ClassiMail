@@ -8,6 +8,7 @@ import React, {
   SetStateAction,
 } from "react";
 import { emailType } from "@/types";
+import { toast } from "sonner";
 
 type MainStateType = {
   emails: emailType[];
@@ -64,7 +65,9 @@ export default function MainContextProvider({
       });
       const data = await response.json();
       setEmails(data);
+      toast.success("Fetched mails !");
     } catch (err) {
+      toast.error("Fetch Failed! Something went wrong!");
       console.error("Failed to fetch emails:", err);
     } finally {
       setMailLoading(false);
@@ -86,7 +89,9 @@ export default function MainContextProvider({
         category: categories[mail.messageId],
       }));
       setEmails(updatedEmails);
+      toast.success("Mails Classified!");
     } catch (err) {
+      toast.error("Classify Failed! Something went wrong!");
       console.error("Failed to classify emails:", err);
     } finally {
       setTagsLoading(false);
