@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { AuthProvider } from "@/context/AuthContext";
+import MainContextProvider from "@/context/MainContext";
 
 export const metadata: Metadata = {
   title: "ClassiMail",
@@ -20,15 +20,15 @@ export default function RootLayout({
 
   return (
     <html lang="en" className="">
-      <AuthProvider>
-        <body
-          className={`${inter.className} container mx-auto relative bg-neutral-100 dark:bg-slate-900`}
-        >
-          <GoogleOAuthProvider clientId={CLIENT_ID}>
-            {children}
-          </GoogleOAuthProvider>
+      <MainContextProvider>
+        <body className={`${inter.className}`}>
+          <div className="h-full container mx-auto max-w-4xl">
+            <GoogleOAuthProvider clientId={CLIENT_ID}>
+              {children}
+            </GoogleOAuthProvider>
+          </div>
         </body>
-      </AuthProvider>
+      </MainContextProvider>
     </html>
   );
 }

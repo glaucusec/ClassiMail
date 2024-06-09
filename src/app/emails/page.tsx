@@ -1,15 +1,14 @@
-import React from "react";
-import Profile from "../../components/Profile";
+import React, { useState } from "react";
 import Classify from "../../components/Classify";
-import EmailFetcher from "@/components/EmailFetcher";
+import EmailsList from "@/components/EmailsList";
+import Header from "@/components/Header";
 
-export default function page() {
+export default async function page() {
   return (
     <React.Fragment>
-      <Profile />
-      
+      <Header />
       <Classify />
-      <EmailFetcher />
+      <EmailsList />
     </React.Fragment>
   );
 }
