@@ -1,5 +1,5 @@
+import React, { Suspense, useContext, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import React, { useEffect, useContext, useState } from "react";
 import { MainContext } from "@/context/MainContext";
 import { emailType } from "@/types";
 
@@ -8,6 +8,14 @@ export default function MailModal({
 }: {
   handleClose: () => void;
 }) {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <MailContent handleClose={handleClose} />
+    </Suspense>
+  );
+}
+
+function MailContent({ handleClose }: { handleClose: () => void }) {
   const { emails } = useContext(MainContext);
   const [mail, setMail] = useState<emailType | null>(null);
   const searchParams = useSearchParams();

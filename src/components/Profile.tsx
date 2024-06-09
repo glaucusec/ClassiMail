@@ -11,6 +11,8 @@ export default async function Profile() {
     <React.Fragment>
       <section className="">
         <Image
+          width={24}
+          height={24}
           className="relative inline-block h-12 w-12 rounded-full object-cover object-center"
           src={image}
           alt="avatar"

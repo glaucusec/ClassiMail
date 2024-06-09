@@ -10,7 +10,7 @@ import MailCard from "./MailCard";
 export default function EmailsList() {
   const { modalOpen, setModalOpen, emails, mailLoading } =
     useContext(MainContext);
-  const router = useRouter(); // Move useRouter hook to the top level
+  const router = useRouter();
   const pathname = usePathname();
 
   function handleClose() {
@@ -19,9 +19,12 @@ export default function EmailsList() {
   }
 
   function navURL(id: string) {
-    const url = new URL(pathname, window.location.origin); // Use window.location.origin to construct the full URL
-    url.searchParams.set("id", id);
-    return url;
+    if (typeof window !== "undefined") {
+      const url = new URL(pathname, window.location.origin);
+      url.searchParams.set("id", id);
+      return url;
+    }
+    return "";
   }
 
   if (mailLoading) {
