@@ -1,18 +1,26 @@
 "use client";
-import React, { createContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useEffect,
+  useState,
+  ReactNode,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import { emailType } from "@/types";
 
 type MainStateType = {
   emails: emailType[];
-  setEmails: React.Dispatch<React.SetStateAction<emailType[]>>;
+  setEmails: Dispatch<SetStateAction<emailType[]>>;
   tags: string[];
-  setTags: React.Dispatch<React.SetStateAction<string[]>>;
+  setTags: Dispatch<SetStateAction<string[]>>;
   classifyMails: () => Promise<void>;
   fetchNEmails: (count: number) => Promise<void>;
   mailLoading: boolean;
+  setMailLoading: Dispatch<SetStateAction<boolean>>;
   tagLoading: boolean;
   modalOpen: boolean;
-  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setModalOpen: Dispatch<SetStateAction<boolean>>;
 };
 
 const initialState: MainStateType = {
@@ -23,34 +31,30 @@ const initialState: MainStateType = {
   classifyMails: async () => {},
   fetchNEmails: async () => {},
   mailLoading: false,
+  setMailLoading: () => {},
   tagLoading: false,
   modalOpen: false,
   setModalOpen: () => {},
 };
 
-export const MainContext = createContext(initialState);
+export const MainContext = createContext<MainStateType>(initialState);
 
 export default function MainContextProvider({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
-  const [emails, setEmails] = useState<emailType[]>([]);
-  const [tags, setTags] = useState<string[]>([]);
-  const [mailLoading, setMailLoading] = useState<boolean>(false);
-  const [tagLoading, setTagsLoading] = useState<boolean>(false);
-  const [modalOpen, setModalOpen] = useState(false);
+  const [emails, setEmails] = useState<emailType[]>(initialState.emails);
+  const [tags, setTags] = useState<string[]>(initialState.tags);
+  const [mailLoading, setMailLoading] = useState<boolean>(
+    initialState.mailLoading
+  );
+  const [tagLoading, setTagsLoading] = useState<boolean>(
+    initialState.tagLoading
+  );
+  const [modalOpen, setModalOpen] = useState<boolean>(initialState.modalOpen);
 
-  useEffect(() => {
-    async function fetchInitialMails() {
-      setMailLoading(true);
-      await fetchNEmails(5);
-      setMailLoading(false);
-    }
-    fetchInitialMails();
-  }, []);
-
-  async function fetchNEmails(count: number = 5) {
+  const fetchNEmails = async (count: number = 5) => {
     setMailLoading(true);
     try {
       const response = await fetch(`/api/emails/${count}`, {
@@ -58,27 +62,41 @@ export default function MainContextProvider({
       });
       const data = await response.json();
       setEmails(data);
-      setMailLoading(false);
     } catch (err) {
+      console.error("Failed to fetch emails:", err);
+    } finally {
       setMailLoading(false);
     }
-  }
+  };
 
-  async function classifyMails() {
+  const classifyMails = async () => {
     setTagsLoading(true);
     try {
       const response = await fetch("/api/classify", {
         method: "POST",
         credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(emails),
       });
+      const { categories } = await response.json();
+      const updatedEmails = emails.map((mail) => ({
+        ...mail,
+        category: categories[mail.messageId],
+      }));
+      setEmails(updatedEmails);
     } catch (err) {
-      console.log(err);
+      console.error("Failed to classify emails:", err);
+    } finally {
+      setTagsLoading(false);
     }
-  }
+  };
+
+  useEffect(() => {
+    const fetchInitialMails = async () => {
+      await fetchNEmails(5);
+    };
+    fetchInitialMails();
+  }, []);
 
   const propContext: MainStateType = {
     emails,
@@ -88,6 +106,7 @@ export default function MainContextProvider({
     classifyMails,
     fetchNEmails,
     mailLoading,
+    setMailLoading,
     tagLoading,
     modalOpen,
     setModalOpen,

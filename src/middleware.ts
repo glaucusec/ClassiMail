@@ -14,26 +14,30 @@ export async function middleware(request: NextRequest) {
 
   // Check if the session token is still valid!
   // If not redirect user to signIn
-  const response = await fetch(
-    `https://gmail.googleapis.com/gmail/v1/users/${email}/profile`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+  try {
+    const response = await fetch(
+      `https://gmail.googleapis.com/gmail/v1/users/${email}/profile`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const data = await response.json();
+    const error = data.error;
+    const invalidToken =
+      error && error.code == 401 && error.status === "UNAUTHENTICATED";
+
+    if (invalidToken) console.log("session is invalid");
+    if (isAuthRoute && !invalidToken) {
+      return NextResponse.redirect(new URL("/emails", request.url));
     }
-  );
-  const data = await response.json();
-  const error = data.error;
-  const invalidToken =
-    error && error.code == 401 && error.status === "UNAUTHENTICATED";
 
-  if (invalidToken) console.log("session is invalid");
-  if (isAuthRoute && !invalidToken) {
-    return NextResponse.redirect(new URL("/emails", request.url));
-  }
-
-  if (mailRoute && invalidToken) {
-    return NextResponse.redirect(new URL("/", request.url));
+    if (mailRoute && invalidToken) {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+  } catch (err) {
+    console.log(err);
   }
 
   return null;

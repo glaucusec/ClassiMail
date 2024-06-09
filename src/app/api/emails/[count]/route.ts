@@ -35,10 +35,16 @@ async function fetchEmailData(
       }
     }
 
-    return { sender, snippet, messageId: id, labelIds };
+    return { sender, snippet, messageId: id, labelIds, category: "" };
   } catch (error) {
     console.error(`Error fetching email data for id ${id}:`, error);
-    return { sender: "", snippet: "", messageId: id, labelIds: [] };
+    return {
+      sender: "",
+      snippet: "",
+      messageId: id,
+      labelIds: [],
+      category: "",
+    };
   }
 }
 
@@ -75,7 +81,7 @@ export async function GET(request: NextRequest, context: { params: Params }) {
     const data = await response.json();
     const messages: messagesType[] = data.messages || [];
 
-    const concurrencyLimit = 5;
+    const concurrencyLimit = 3;
     const fetchEmailsWithLimit = async (ids: string[]) => {
       const results: emailType[] = [];
       for (let i = 0; i < ids.length; i += concurrencyLimit) {

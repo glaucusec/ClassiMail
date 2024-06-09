@@ -8,4 +8,16 @@ export type emailType = {
   snippet: string;
   messageId: string;
   labelIds: string[];
+  category:
+    
 };
+
+export type CategoryType = 
+  | 'Important'
+  | 'General'
+  | 'Spam'
+  | 'Promotions'
+  | 'Social'
+  | 'Marketing'
+  | '';
+ 

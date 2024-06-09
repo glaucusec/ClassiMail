@@ -17,10 +17,11 @@ export async function POST(request: NextRequest) {
 
     const gptResponse = completion.choices[0];
     const gptResponseContent = gptResponse.message.content;
-    const gptParsedArray = JSON.parse(gptResponseContent || "");
+    const gptParsedObject = JSON.parse(gptResponseContent || "");
+    console.log(gptParsedObject)
     return NextResponse.json({
       message: "Mails classified successfully",
-      data: gptParsedArray,
+      categories: gptParsedObject,
     });
   } catch (error) {
     console.error("Error parsing request body:", error);
